@@ -2,15 +2,13 @@ import { model, Schema, Types } from "mongoose";
 
 interface Users {
     _id: Types.ObjectId;
-    avatar: string;
+    avatar?: string;
     nom: string;
     prenoms: string;
     contact: string;
     pays: string;
-    ville: string
     email: string;
-    compte: Types.ObjectId
-    artiste?: Types.ObjectId
+    annonces: Types.ObjectId[]
 
 }
 
@@ -20,11 +18,9 @@ const userSchema = new Schema<Users>({
     nom: { type: String },
     prenoms: { type: String },
     contact: { type: String },
-    ville: { type: String },
     pays: { type: String },
     email: { type: String },
-    compte: { type: Schema.Types.ObjectId, ref: 'Compte' },
-    artiste: {type: Schema.Types.ObjectId, ref: 'Artiste'}
+    annonces: {type: [Schema.Types.ObjectId]}
 })
 
 const User = model('User', userSchema)

@@ -45,12 +45,16 @@ class AuthController {
         const password = body.password
         const user = await Compte.findOne({ username: username })
         if (user) {
-            bcrypt.compare(password, user.password, (err, isValid) => {
-                if (isValid) res.status(200).send(user)
-                else res.status(201).send('Mot de passe incorrect')
-            })
-        } else res.status(404).send('Aucun utilisateur trouvé')
+            bcrypt.compare(password, user.password, async(err, isValid) => {
+                if (isValid) {
 
+                   const info = await Artiste.findOne({_id: user.owner})
+                       const response = {...user, ...info}
+                       res.status(200).send(response)
+                }
+                else res.status(201).send({ message: 'Mot de passe incorrect' })
+            })
+        } else res.status(404).send({ message: 'Aucun utilisateur trouvé' })
     }
     async GpsignUp(req: Request, res: Response) {
         const { body } = req
@@ -61,8 +65,7 @@ class AuthController {
             nom: body.nom,
             prenoms: body.prenoms,
             contact: body.contact,
-            coordonnees: body.coordonnees,
-            email: body.email
+            pays: body.pays,
         })
         user.save(async (err, usr) => {
             if (err) {
@@ -70,22 +73,13 @@ class AuthController {
             }
             const compte = new Compte({
                 _id: new Types.ObjectId,
-                username: body.username,
+                username: body.email,
                 password: CryptedPassword,
                 owner: usr._id
             })
-            if (body.activite) {
-                const activites = new Activites({
-                    _id: new Types.ObjectId,
-                    artiste: usr._id,
-                    activite: body.activite,
-                })
-                await activites.save()
-            }
             await compte.save()
-            res.status(200).send('OK')
+            res.status(200).send({ message: 'OK' })
         })
-
     }
     async proSingup(req: Request, res: Response) {
         const { body } = req
@@ -98,7 +92,6 @@ class AuthController {
             contact: body.contact,
             email: body.email,
             pays: body.pays,
-            ville: body.ville,
             metiers: body.metiers,
             style_musical: body.style_musical,
             instruments: body.instruments,
@@ -107,12 +100,12 @@ class AuthController {
             if (err) console.log(err)
             const compte = new Compte({
                 _id: new Types.ObjectId,
-                username: body.username,
+                username: body.email,
                 password: CryptedPassword,
                 type_compte: 'Professionnel',
                 owner: usr._id
             })
-            await compte.save().then(()=> res.status(200).send({ message: 'ok' }))
+            await compte.save().then(() => res.status(200).send({ message: 'ok' }))
         })
     }
     changePassword(req: Request, res: Response) {

@@ -27,7 +27,6 @@ class Server {
         this.app.use('/authentication', authRoute)
         this.app.use('/user/:user_id', userRoute)
     }
-
     start() {
         this.app.listen(this.app.get('port'), () => {
             console.log('Server on port', this.app.get('port'));
@@ -36,5 +35,4 @@ class Server {
 }
 
 const server = new Server
-
 server.start()

@@ -5,6 +5,7 @@ import Instruments from "../models/instrument.model";
 class PublicController {
     getAllCategories(req: Request, res: Response) {
         Categorie.find({})
+            .sort({ nom: 1 })
             .select("nom")
             .exec((err, doc) => {
                 if (err) console.log(err)
@@ -17,6 +18,7 @@ class PublicController {
 
     getAllTypes(req: Request, res: Response) {
         Genre.find({})
+            .sort({ nom: 1 })
             .select('nom')
             .exec((err, doc) => {
                 if (err) console.log(err)
@@ -26,6 +28,7 @@ class PublicController {
 
     getAllMusicTools(req: Request, res: Response) {
         Instruments.find({})
+            .sort({ nom: 1 })
             .select('nom')
             .exec((err, doc) => {
                 if (err) console.log(err)

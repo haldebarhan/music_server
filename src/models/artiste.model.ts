@@ -8,7 +8,6 @@ interface artiste {
     contact: string
     email: string
     pays: string
-    ville: string
     metiers: string[]
     style_musical?: [string]
     instruments?: [string]
@@ -24,7 +23,6 @@ const artisteSchema = new Schema<artiste>({
     contact: {type: String},
     email: {type: String},
     pays: {type: String},
-    ville: {type: String},
     metiers: {type: [String]},
     style_musical: {type: [String]},
     instruments: {type: [String]},

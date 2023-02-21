@@ -9,6 +9,7 @@ const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
 const storage = multer.diskStorage({
     destination: path.join(__dirname, "../../public/images"),
     filename: (req: Request, file: Express.Multer.File, callback: FileNameCallback) => {
+        const ext = path.extname(file.originalname)
         callback(null, uniqueSuffix + '-' + file.originalname)
     }
 })

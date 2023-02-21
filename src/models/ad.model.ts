@@ -1,25 +1,30 @@
-import mongoose, {Schema, Types} from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 interface Ad {
-    titre: string;
-    description: string;
-    categorie: string;
-    type_pub: string;
-    advertiser: Types.ObjectId;
-    createdAt: string;
-    product?: Object
+  _id: Types.ObjectId
+  titre: string;
+  description: object[];
+  categorie: string;
+  type_annonce: string;
+  advertiser: Types.ObjectId;
+  createdAt: string;
+  fichier: string[];
 }
 
 const AdSchema = new Schema<Ad>({
-    titre: {type: String},
-    description: {type: String},
-    categorie: {type: String, enum: ['Location', 'Vente', 'Service', 'Annonce']},
-    type_pub: {type: String},
-    advertiser: {type: Schema.Types.ObjectId, ref: 'User'},
-    createdAt: {type: String},
-    product: {type: Schema.Types.Mixed}
-})
+  _id: {type: Schema.Types.ObjectId},
+  titre: { type: String },
+  description: { type: [Object] },
+  categorie: { type: String },
+  type_annonce: {
+    type: String,
+    enum: ["VIP", "Standard"],
+    default: "Standard",
+  },
+  advertiser: { type: Schema.Types.ObjectId, ref: "User" },
+  createdAt: { type: String },
+  fichier: { type: [String] },
+});
 
-const Publication = mongoose.model('Publication', AdSchema)
+const Publication = mongoose.model("Publication", AdSchema);
 
-
-export default Publication
+export default Publication;

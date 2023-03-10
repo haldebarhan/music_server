@@ -20,28 +20,28 @@ class UserController {
         }
       }
       desc = data;
-      console.log(desc);
       const user = await User.findOne({ _id: user_id });
-      if (user) console.log(user);
-      const files = <Array<object>>req.files;
-      for (const file of files) {
-        const image = <Express.Multer.File>file;
-        fileNames.push(image.filename);
+      if (user) {
+        const files = <Array<object>>req.files;
+        for (const file of files) {
+          const image = <Express.Multer.File>file;
+          fileNames.push(image.filename);
+        }
+        const pub = new Publication({
+          _id: new Types.ObjectId(),
+          categorie: body.categorie,
+          titre: body.titre,
+          advertiser: user?._id,
+          createdAt: Date.now(),
+          fichier: fileNames,
+          description: desc,
+        });
+        pub.save((err, doc) => {
+          user.annonces.push(doc._id);
+          user.save();
+          res.status(200).send({ message: "Enregistrement Terminé" });
+        });
       }
-      const pub = new Publication({
-        _id: new Types.ObjectId(),
-        categorie: body.categorie,
-        titre: body.titre,
-        advertiser: user?._id,
-        createdAt: Date.now(),
-        fichier: fileNames,
-        description: desc,
-      });
-      pub.save((err, doc) => {
-        user?.annonces.push(doc._id);
-        user?.save();
-        res.status(200).send({ message: "Enregistrement Terminé" });
-      });
     });
   }
   removeAd(req: Request, res: Response) {}

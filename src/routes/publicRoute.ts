@@ -11,6 +11,8 @@ class PublicRouter {
         this.router.get('/', publicController.getAllCategories)
         this.router.get('/types', publicController.getAllTypes)
         this.router.get('/tools', publicController.getAllMusicTools)
+        this.router.get('/ads', publicController.getAllAds)
+        this.router.get('/ad/:id', publicController.getAdById)
     }
 }
 

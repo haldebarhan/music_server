@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import ImageUpload from "../middlewares/imageMulter.middleware";
-import User from "../models/user.model";
 import Publication from "../models/ad.model";
 import { Types } from "mongoose";
 import Categorie from "../models/categories.model";
+import Compte from "../models/compte.model";
 
 class UserController {
   postAd(req: Request, res: Response) {
-    const user_id = "63dd6f97a5e98f0492bcf290";
     const fileNames: string[] = [];
     const ut = ImageUpload.array("fichiers");
     ut(req, res, async (err: unknown) => {
       const { body } = req;
+      const user_id = req.params["user_id"];
       var desc: any = [];
       const data: any = {};
       for (let key in body) {
@@ -20,7 +20,7 @@ class UserController {
         }
       }
       desc = data;
-      const user = await User.findOne({ _id: user_id });
+      const user = await Compte.findOne({ owner: user_id }).populate("owner");
       if (user) {
         const files = <Array<object>>req.files;
         for (const file of files) {
@@ -31,17 +31,18 @@ class UserController {
           _id: new Types.ObjectId(),
           categorie: body.categorie,
           titre: body.titre,
-          advertiser: user?._id,
+          advertiser: user?.owner._id,
           createdAt: Date.now(),
           fichier: fileNames,
           description: desc,
         });
         pub.save((err, doc) => {
-          user.annonces.push(doc._id);
+          if (err) console.log(err);
+          user.owner.annonces.push(doc._id);
           user.save();
-          res.status(200).send({ message: "Enregistrement Terminé" });
         });
-      }
+        res.status(200).send({ message: "Enregistrement Terminé" });
+      } else console.log("eeeeeeeee");
     });
   }
   removeAd(req: Request, res: Response) {}

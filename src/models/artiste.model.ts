@@ -1,6 +1,6 @@
-import { model, Schema, Types } from "mongoose"
+import { Document, model, Schema, Types } from "mongoose"
 
-interface artiste {
+export interface ArtisteDoc extends Document {
     _id: Types.ObjectId
     avatar?: string
     nom: string
@@ -15,7 +15,7 @@ interface artiste {
     annonces: Types.ObjectId[]
 }
 
-const artisteSchema = new Schema<artiste>({
+const artisteSchema = new Schema<ArtisteDoc>({
     _id: {type: Schema.Types.ObjectId},
     avatar: {type: String},
     nom: {type: String},
@@ -30,6 +30,6 @@ const artisteSchema = new Schema<artiste>({
     annonces: {type: [Schema.Types.ObjectId]}
 })
 
-const Artiste = model('Artiste', artisteSchema)
+const Artiste = model<ArtisteDoc>('Artiste', artisteSchema)
 
 export default Artiste

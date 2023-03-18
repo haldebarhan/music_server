@@ -26,7 +26,7 @@ class Server {
     routes(): void {
         this.app.use('/', publicRoute)
         this.app.use('/authentication', authRoute)
-        this.app.use('/user/:user_id', userRoute)
+        this.app.use('/user', userRoute)
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
